@@ -76,43 +76,29 @@ int main(void) {
             int i = adr % bsize;
 
             int next, line;
+            next = c1.nextLine();
+            line = c1.inCache(b);
 
-            switch(op) {
-                case 'r':
-                    line = c1.inCache(b);
-                    if(line == -1) {
-                        m1.readBlock(b, block);
-                        c1.insertLine(block, b, EXCLUSIVE);
-                    }
-                    break;
+            // write back
+            if(line == -1) {
+                if (c1.getState(next) == MODIFIED) {
+                    c1.getBlock(next, block);
+                    m1.writeBlock(c1.getAddress(next), block);
+                }
 
-                case 'w':
-                    int value;
-                    
-                    line = c1.inCache(b);
+                m1.readBlock(b, block);
+                c1.insertLine(next, block, b, EXCLUSIVE);
 
-                    std::cout << "Novo valor: ";
-                    std::cin >> value;
+                line = c1.inCache(b);
+            }
 
-                    next = c1.nextLine();
+            if(op == 'w') {
+                int value;
 
-                    // write back
-                    if (c1.getState(next) == MODIFIED) {
-                        c1.getBlock(next, block);
-                        m1.writeBlock(c1.getAddress(next), block);
-                    }
+                std::cout << "Novo valor: ";
+                std::cin >> value;
 
-                    if (line == -1) {
-                        m1.readBlock(b, block);
-                        c1.insertLine(block, b, EXCLUSIVE);
-                    }
-
-                    line = c1.inCache(b);
-                    if(line != -1) {
-                        c1.modifyLine(line, i, value);
-                    }
-
-                    break;
+                c1.modifyLine(line, i, value);
             }
         } else op = 0;
 
