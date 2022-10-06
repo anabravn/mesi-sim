@@ -39,12 +39,6 @@ void DataBus::broadcastWrite(CacheController *src, int addr) {
     }
 }
 
-void DataBus::sendLine(int addr, int *block) {
-    for(CacheController *c : caches) {
-        c->receiveLine(addr, block);
-    }
-}
-
 void DataBus::printAll() {
     int i = 1;
 

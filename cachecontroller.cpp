@@ -102,14 +102,6 @@ void CacheController::busWrite(int block) {
     }
 }
 
-void CacheController::receiveLine(int addr, int *block) {
-    int line = cache->inCache(addr);
-
-    if (line != -1) {
-        cache->insertLine(line, block, addr, SHARED);
-    }
-}
-
 void CacheController::printCache() {
     cache->print();
 }
