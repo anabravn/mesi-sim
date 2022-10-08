@@ -82,8 +82,6 @@ class DataBus {
         bool broadcastRead(CacheController *src, int addr);
         void broadcastWrite(CacheController *src, int addr);
 
-        void sendLine(int addr, int *block);
-
         void printAll();
 };
 
@@ -106,8 +104,6 @@ class CacheController {
 
         bool busRead(int block);
         void busWrite(int block);
-
-        void receiveLine(int addr, int *block);
 
         void printCache();
 };
