@@ -1,28 +1,23 @@
 #include <iostream>
+#include <vector>
 #include "mesi.hpp"
 
 int main(void) {
-    int bsize = 5;
-    Memory m1(bsize, 12);
-    DataBus bus(&m1);
-    CacheController c1(bsize, 4, &bus);
-    CacheController c2(bsize, 4, &bus);
-    int adr, value;
+    int bsize = 4;
     char op;
 
+    Memory mem(bsize, 10);
+    DataBus bus(&mem);
+
+    CacheController cache[] = {CacheController(bsize, 4, &bus), CacheController(bsize, 4, &bus)};
+
     do {
-        CacheController *tmp;
-        int n;
+        int n, adr, value;
 
         bus.printAll();
     
         std::cout << "\nCache: ";
         std::cin >> n;
-
-        if (n == 1) 
-            tmp = &c1;
-        else
-            tmp = &c2;
 
         std::cout << "Ler ou Escrever (r/w): ";
         std::cin >> op;
@@ -35,11 +30,11 @@ int main(void) {
                 std::cout << "Valor: ";
                 std::cin >> value;
 
-                tmp->write(adr, value);
+                cache[n-1].write(adr, value);
                 break;
 
             case 'r':
-                value = tmp->read(adr);
+                value = cache[n-1].read(adr);
                 std::cout << "Valor lido: " << value << std::endl;
                 break;
 
