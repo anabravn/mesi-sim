@@ -19,7 +19,7 @@ void CacheController::writeMemory(int line) {
     delete[] tmp;
 }
 
-/* Lê o bloco de número 'int adr' da memória principal
+/* Lê o bloco de número 'int addr' da memória principal
    através do barramento e o insere na cache */
 void CacheController::readMemory(int line, int addr, CACHE_STATE state) {
     int *tmp = new int[cache->getBlockSize()];
