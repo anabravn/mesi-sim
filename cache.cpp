@@ -37,7 +37,7 @@ Cache::~Cache() {
 // Retorna -1 caso não esteja e o número da linha caso esteja
 int Cache::inCache(int addr) {
     for(int i = 0; i < line_number; i++) {
-        if(lines[i].addr == addr)
+        if(lines[i].addr == addr && lines[i].state != INVALID)
             return i;
     }
 

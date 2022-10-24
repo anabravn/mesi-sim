@@ -39,7 +39,7 @@ int CacheController::readLine(int block, CACHE_STATE state) {
 
     if(line == -1) {
         if(cache->getState(next) == MODIFIED) {
-            writeMemory(next);
+            writeMemory(next); // writeback
         }
 
         readMemory(next, block, state);
@@ -77,7 +77,7 @@ void CacheController::write(int addr, int word) {
 
     bus->broadcastWrite(this, b);
 
-    line = readLine(b);
+    line = readLine(b, EXCLUSIVE);
     cache->modifyLine(line, i, word);
 }
 
@@ -115,7 +115,7 @@ bool CacheController::busRead(int block) {
 
     if(line != -1) {
         if(cache->getState(line) == MODIFIED) {
-            writeMemory(line);
+            writeMemory(line); 
         }
 
         cache->setState(line, SHARED);
@@ -138,6 +138,7 @@ void CacheController::busWrite(int block) {
             writeMemory(line);
         }
         cache->setState(line, INVALID);
+        //cache->setTime(line, 0)
     }
 }
 

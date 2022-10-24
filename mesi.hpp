@@ -93,7 +93,7 @@ class CacheController {
     protected:
         void writeMemory(int line);
         void readMemory(int line, int addr, CACHE_STATE state);
-        int readLine(int block, CACHE_STATE state=EXCLUSIVE);
+        int readLine(int block, CACHE_STATE state);
 
     public:
         CacheController(int block_size, int line_number, DataBus *bus);

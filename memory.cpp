@@ -2,6 +2,9 @@
 #include <iostream>
 #include "mesi.hpp"
 
+/*  Inicializa a memória, criando um vetor com 
+    'block_size' * 'block_number' inteiros que representam as 
+    células da memória */
 Memory::Memory(int block_size, int block_number) {
     int total = block_size * block_number;
 
@@ -20,6 +23,8 @@ Memory::~Memory() {
     delete[] mem;
 }
 
+/*  Copia o conteúdo do bloco de número 'addr' para
+    o endereço de memória 'dest' */
 void Memory::getBlock(int addr, int *dest) {
     int start = addr * block_size;
     
@@ -28,6 +33,8 @@ void Memory::getBlock(int addr, int *dest) {
     }
 }
 
+/*  Copia o conteúdo do endereço de memória 'src' para
+    o bloco de número 'addr' */
 void Memory::setBlock(int addr, const int *src) {
     int start = addr * block_size;
 
@@ -36,6 +43,7 @@ void Memory::setBlock(int addr, const int *src) {
     }
 }
 
+/*  Getters */
 int Memory::getBlockSize() {
     return block_size;
 }
@@ -44,7 +52,7 @@ int Memory::getBlockNumber() {
     return block_number;
 }
 
-/* Função pra imprimir a memória */
+/*  Método pra imprimir a memória na tela */
 void Memory::print() {
     std::string str;
 
