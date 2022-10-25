@@ -2,6 +2,14 @@
 #include <cstdio>
 #include "mesi.hpp"
 
+/*  Inicializa a memória cache com 'line_number' linhas
+    e blocos de tamanho 'block_size' (devem ser o mesmo tamanho
+    dos blocos da memória). 
+    
+    Inicializa o contador para registrar o tempo em que cada nova
+    linha entra na cache (para o algoritmo de substituição FIFO)
+    
+    Aloca espaço para os blocos de cada linha */
 Cache::Cache(int block_size, int line_number) {
     this->block_size = block_size;
     this->line_number = line_number;
@@ -24,6 +32,7 @@ Cache::Cache(int block_size, int line_number) {
     }
 }
 
+/* Desaloca a memória de cada linha */
 Cache::~Cache() {
     for(int i = 0; i < line_number; i++) {
         delete[] lines[i].block;
@@ -33,38 +42,43 @@ Cache::~Cache() {
 }
 
 
-// Verifica se a linha com o endereço dado está na cache
-// Retorna -1 caso não esteja e o número da linha caso esteja
-int Cache::inCache(int addr) {
+/*  Verifica se a linha de bloco número 'block_num' está na cache
+    Retorna -1 caso não esteja e o número da linha caso esteja */
+int Cache::inCache(int block_num) {
     for(int i = 0; i < line_number; i++) {
-        if(lines[i].addr == addr && lines[i].state != INVALID)
+        if(lines[i].addr == block_num && lines[i].state != INVALID)
             return i;
     }
 
     return -1;
 }
 
-// Modifica uma palavra de determinada linha da cache
+/*  Modifica a palavra de indice 'idx' da linha 'line' da cache
+    com o novo valor 'value'  */
 void Cache::modifyLine(int line, int idx, int value) {
     lines[line].block[idx] = value;
     lines[line].state = MODIFIED;
 }
 
-// Insere um bloco na cache
-void Cache::insertLine(int line, int *block, int addr, CACHE_STATE state) {
+/*  Insere uma nova linha na cache, na linha 'line', copiando o conteúdo armazenado
+    em 'block', armazenando na linha o número do bloco 'block_num' e o estado 'state' */
+void Cache::insertLine(int line, int *block, int block_num, CACHE_STATE state) {
     
     // copia o conteúdo do bloco para a linha
     for(int j = 0; j < block_size; j++) {
         lines[line].block[j] = block[j];
     }
 
-    lines[line].addr = addr;
+    lines[line].addr = block_num;
     lines[line].state = state;
 
     lines[line].time = count++;
 }
 
-// Retorna o índice da próxima linha a ser substituída
+/*  Retorna o índice da próxima linha a ser substituída, 
+    de acordo com o algoritmo de substituição FIFO. A linha com menor
+    tempo de entrada (atributo 'time') é retornada. No caso da cache
+    não estar cheia, retorna a última linha inválida com tempo 0 */
 int Cache::nextLine() {
     int next = 0;
 
@@ -110,17 +124,20 @@ void Cache::getBlock(int line, int *dest) {
     }
 }
 
+/* Retorna o valor de índice 'i' da linha 'line' */
 int Cache::getWord(int line, int i) {
     return lines[line].block[i];
 }
 
-/* SETTERS */
+/* Setters para a linha */
 
 void Cache::setState(int line, CACHE_STATE state) {
     lines[line].state = state;
 }
 
+// TODO: setTime
 
+/* Função auxiliar para imprimir os blocos das linhas da cache */
 void print_array(int *array, int size) {
     for(int i = 0; i < size; i++) {
         printf(" %03d", array[i]);

@@ -44,6 +44,7 @@ void Memory::setBlock(int addr, const int *src) {
 }
 
 /*  Getters */
+
 int Memory::getBlockSize() {
     return block_size;
 }
