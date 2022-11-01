@@ -38,6 +38,8 @@ int CacheController::readLine(int block, CACHE_STATE state) {
     int line = cache->inCache(block);
 
     if(line == -1) {
+        std::cout << "MISS\n";
+
         if(cache->getState(next) == MODIFIED) {
             writeMemory(next); // writeback
         }
@@ -45,6 +47,9 @@ int CacheController::readLine(int block, CACHE_STATE state) {
         readMemory(next, block, state);
 
         line = next;
+
+    } else {
+        std::cout << "HIT\n";
     }
 
     return line;
@@ -77,6 +82,8 @@ void CacheController::write(int addr, int word) {
 
     bus->broadcastWrite(this, b);
 
+    std::cout << "\nWRITE ";
+
     line = readLine(b, EXCLUSIVE);
     cache->modifyLine(line, i, word);
 }
@@ -98,6 +105,8 @@ int CacheController::read(int addr) {
     if(bus->broadcastRead(this, b)) {
         state = SHARED;
     }
+
+    std::cout << "\nREAD ";
 
     line = readLine(b, state);
 
@@ -138,7 +147,7 @@ void CacheController::busWrite(int block) {
             writeMemory(line);
         }
         cache->setState(line, INVALID);
-        //cache->setTime(line, 0)
+        cache->setTime(line, 0);
     }
 }
 

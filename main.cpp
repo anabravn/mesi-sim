@@ -9,25 +9,25 @@ int main(void) {
     Memory mem(bsize, 10);
     DataBus bus(&mem);
 
-    CacheController cache[] = {CacheController(bsize, 4, &bus), CacheController(bsize, 4, &bus)};
+    CacheController cache[] = {CacheController(bsize, 4, &bus), CacheController(bsize, 4, &bus), CacheController(bsize, 4, &bus)};
 
     do {
         int n, adr, value;
 
         bus.printAll();
     
-        std::cout << "\nCache: ";
+        std::cout << "\nSelecione o processador (1, 2, 3): ";
         std::cin >> n;
 
-        std::cout << "Ler ou Escrever (r/w): ";
+        std::cout << "Selecione a operação (Escrever : 'r', Ler: 'w'): ";
         std::cin >> op;
 
-        std::cout << "Endereço: ";
+        std::cout << "Digite o endereço de memória: ";
         std::cin >> adr;
 
         switch(op) {
             case 'w':
-                std::cout << "Valor: ";
+                std::cout << "Valor a ser escrito: ";
                 std::cin >> value;
 
                 cache[n-1].write(adr, value);

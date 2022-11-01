@@ -42,6 +42,7 @@ class Cache {
         int getWord(int line, int i);
 
         void setState(int line, CACHE_STATE state);
+        void setTime(int line, int time);
 
         void print();
 };

@@ -80,10 +80,10 @@ void Cache::insertLine(int line, int *block, int block_num, CACHE_STATE state) {
     tempo de entrada (atributo 'time') é retornada. No caso da cache
     não estar cheia, retorna a última linha inválida com tempo 0 */
 int Cache::nextLine() {
-    int next = 0;
+    int next = line_number - 1;
 
     // acha a linha que entrou primeiro na cache (menor tempo)
-    for(int i = 1; i < line_number; i++) {
+    for(int i = line_number - 2; i >= 0; i--) {
         if(lines[i].time <= lines[next].time) {
             next = i;
         }
@@ -135,7 +135,9 @@ void Cache::setState(int line, CACHE_STATE state) {
     lines[line].state = state;
 }
 
-// TODO: setTime
+void Cache::setTime(int line, int time) {
+    lines[line].time = time;
+}
 
 /* Função auxiliar para imprimir os blocos das linhas da cache */
 void print_array(int *array, int size) {
